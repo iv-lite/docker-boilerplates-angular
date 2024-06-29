@@ -1,0 +1,13 @@
+name: ${APP_NAME}
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker/dockerfile
+      target: production
+      args:
+        - APP_NAME=${APP_NAME}
+    ports:
+      - ${NGINX_PORT}:80
+      - ${NGINX_SSL_PORT}:443

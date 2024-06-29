@@ -1,0 +1,15 @@
+name: ${APP_NAME}
+
+services:
+  app:
+    tty: true
+    extends:
+      file: compose.yml
+      service: app
+    build:
+      target: development
+    ports:
+      - ${APP_PORT}:4200
+    volumes:
+      - ./tools/:/home/${USERNAME:-angular}/tools
+      - ../:/app

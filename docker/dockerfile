@@ -1,0 +1,46 @@
+FROM node:lts-alpine3.20 AS base
+# ------------------------------------------------ base
+WORKDIR /app
+
+ARG USERNAME=angular
+
+RUN apk update \
+    && apk upgrade \
+    && adduser -s /bin/sh -D ${USERNAME} \
+    && chown -R ${USERNAME}:${USERNAME} /app
+
+FROM base AS builder
+# ------------------------------------------------ base
+COPY . /app/
+
+RUN npm install --omit=dev \
+    && npx ng build 
+
+FROM nginx:1.27-alpine AS production
+# ------------------------------------------------ builder
+WORKDIR /etc/nginx/ssl
+
+ARG APP_NAME
+
+COPY docker/nginx/ssl/ /etc/nginx/ssl/
+COPY docker/nginx/conf.d/default.conf.template /etc/nginx/templates/
+COPY --from=builder /app/dist/${APP_NAME}/ /app
+
+
+FROM base AS development
+# ------------------------------------------------ development
+ARG USERNAME=angular
+ARG APP_NAME
+
+RUN apk update \
+    && apk add --update --no-cache \
+        npm \
+        git \
+        openssh \
+    && npm install -g @angular/cli
+
+ENV PATH=/home/${USERNAME}/tools:${PATH}
+
+COPY --chown=${USERNAME}:${USERNAME} docker/tools/ /home/${USERNAME}/tools
+
+USER ${USERNAME}
