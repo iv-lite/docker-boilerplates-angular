@@ -3,13 +3,22 @@ name: ${APP_NAME}
 services:
   app:
     tty: true
+    command: ng-dev.sh
     extends:
       file: compose.yml
       service: app
     build:
       target: development
+      args:
+        - DEBUG_TOOLS=${DEBUG_TOOLS:-false}
+    environment:
+      - DEBUG_TOOLS=${DEBUG_TOOLS:-false}
+      - APP_NAME=${APP_NAME}
+      - NG_CLI_ANALYTICS="ci"
     ports:
       - ${APP_PORT}:4200
     volumes:
       - ./tools/:/home/${USERNAME:-angular}/tools
       - ../:/app
+    extra_hosts:
+      - "localhost:host-gateway"
