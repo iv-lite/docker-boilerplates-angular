@@ -9,11 +9,12 @@ if [ -z $APP_NAME ]; then
   exit 1
 fi
 
-if [ -f package.json ]; then
+if [ -f /app/package.json ]; then
   echo "Project already initialized"
   exit 1
 fi
 
+cd /app
 ng new $APP_NAME --skip-git
 
 cp -a /app/$APP_NAME/. /app
