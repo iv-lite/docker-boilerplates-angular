@@ -1,3 +1,5 @@
+name: boilerplates-angular
+
 services:
   app:
     tty: true
