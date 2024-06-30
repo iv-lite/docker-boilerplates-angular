@@ -1,5 +1,3 @@
-name: ${APP_NAME}
-
 services:
   app:
     build:

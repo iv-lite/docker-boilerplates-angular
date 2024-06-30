@@ -30,7 +30,7 @@
 	// "shutdownAction": "none",
 
 	// Uncomment the next line to run commands after the container is created.
-	"postStartCommand": "git config --global --add safe.directory /app"
+	"postStartCommand": "git config --global --add safe.directory /app && ng-dev.sh"
 
 	// Configure tool-specific properties.
 	// "customizations": {},
