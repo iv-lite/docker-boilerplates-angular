@@ -9,21 +9,17 @@ if [ -z $APP_NAME ]; then
   exit 1
 fi
 
-if [ -f /app/package.json ]; then
-  echo "Project already initialized"
-  exit 1
-fi
-
 cd /app
-ng new $APP_NAME --skip-git
+if ! [ -f /app/angular.json ]; then
+  ng new $APP_NAME --skip-git
 
-cp -a /app/$APP_NAME/. /app
-rm -rf $APP_NAME
+  cp -a /app/$APP_NAME/ /app
+  rm -rf $APP_NAME
 
-if [ $DEBUG_TOOLS = true ]; then
-  exit 0
+  if [ $DEBUG_TOOLS = false ]; then
+    rm -rf /app/.git
+  fi
 fi
 
-rm -rf /app/.git
 cd /app
 git init
