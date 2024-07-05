@@ -13,4 +13,4 @@ if ! [ -f /app/angular.json ]; then
   init.sh
 fi
 
-ng serve --host 0.0.0.0 --disable-host-check
+ng serve --host 0.0.0.0 --disable-host-check "$@"
