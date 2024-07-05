@@ -18,8 +18,6 @@ if ! [ -f /app/angular.json ]; then
 
   if [ $DEBUG_TOOLS = false ]; then
     rm -rf /app/.git
+    git init
   fi
 fi
-
-cd /app
-git init
