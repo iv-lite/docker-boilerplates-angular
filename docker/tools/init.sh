@@ -13,7 +13,7 @@ cd /app
 if ! [ -f /app/angular.json ]; then
   ng new $APP_NAME --skip-git
 
-  cp -a /app/$APP_NAME/ /app
+  cp -a /app/$APP_NAME/. /app
   rm -rf $APP_NAME
 
   if [ $DEBUG_TOOLS = false ]; then
