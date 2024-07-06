@@ -14,7 +14,7 @@ FROM base AS builder
 COPY . /app/
 
 RUN npm install --omit=dev \
-    && npx ng build 
+    && npx ng build
 
 FROM nginx:1.27-alpine AS production
 # ------------------------------------------------ builder
@@ -31,13 +31,30 @@ FROM base AS development
 # ------------------------------------------------ development
 ARG USERNAME=angular
 ARG APP_NAME
+ARG APP_DOMAIN
+
+WORKDIR /etc/nginx/ssl
 
 RUN apk update \
     && apk add --update --no-cache \
         npm \
         git \
         openssh \
-    && npm install -g @angular/cli
+        nss \
+        curl \
+    && npm install -g @angular/cli \
+    && curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64" \
+    && chmod +x mkcert-v*-linux-amd64 \
+    && cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert \
+    && mkcert \
+        -key-file certificate.key \
+        -cert-file certificate.pem \
+        ${APP_DOMAIN} \
+    && chown -R ${USERNAME}:${USERNAME} \
+        certificate.key \
+        certificate.pem
+
+WORKDIR /app
 
 ENV PATH=/home/${USERNAME}/tools:${PATH}
 
